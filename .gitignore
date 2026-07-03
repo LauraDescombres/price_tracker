@@ -3,3 +3,6 @@ venv/
 
 #cache python
 __pycache__/
+
+#db
+.db
