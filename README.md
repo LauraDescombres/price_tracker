@@ -9,6 +9,7 @@ Utilisation du site https://books.toscrape.com/index.html
 - Lister les produits à scraper
 - Désactiver un produit à scraper
 - Scraper les prix
+- Alertes de prix via Discord
 
 ## Installation
 
@@ -20,6 +21,7 @@ python -m venv venv
 pip install -r requirements.txt
 python db.py
 ```
+- copier config.example.py en config.py et y renseigner l'URL du webhook Discord 
 
 ## Utilisation
 
