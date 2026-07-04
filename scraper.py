@@ -1,24 +1,20 @@
 import requests
-import sqlite3
+from db import connexion
 from bs4 import BeautifulSoup
 from datetime import datetime as dt
 
-def connexion():
-    return sqlite3.connect('BDD.db')
-
-def create_table():
-    try:
+#fonction qui recupère les produits actifs
+def get_products():
+    try: 
         with connexion() as conn:
             cursor = conn.cursor()
-            sql = '''CREATE TABLE IF NOT EXISTS Releves (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            prix FLOAT,
-            date_releve DATETIME
-            );'''
+            sql = '''SELECT id, nom, url FROM produits WHERE actif = 1;'''
             cursor.execute(sql)
-            conn.commit()
+            rows = cursor.fetchall()
+            return rows
     except Exception as e:
-        print(f"Erreur lors de la creation de la table: {e}")
+        print(f"Erreur lors de la récupération des produits : {e}")
+        return None
 
 #scrape + retourne prix
 def fetch_price(url):
@@ -45,20 +41,33 @@ def fetch_price(url):
         return None
 
 #sauvegarde
-def save(price):
+def save(price, produit_id):
     try:
         with connexion() as conn:
             cursor = conn.cursor()
-            sql = 'INSERT INTO Releves (prix, date_releve) VALUES (?, ?);'
-            cursor.execute(sql, (price, dt.now().isoformat()))
+            sql = 'INSERT INTO releves (prix, date_releve, produit_id) VALUES (?, ?, ?);'
+            cursor.execute(sql, (price, dt.now().isoformat(), produit_id))
             conn.commit()
     except Exception as e:
         print(f"Erreur lors de l'insertion dans la table: {e}")
         return None
+    
+def main():
+    produits = get_products()
+    if produits is None:
+        return
+        
+    if not produits:
+        print("Aucun produit à scraper")
+        return
+    
+    for produit_id, nom, url in produits:
+        price = fetch_price(url)
+        if price is not None:
+            save(price, produit_id)
+            print(f"{nom} : {price}")
+        else:
+            print(f"Erreur sur le produit {nom}")
 
 if __name__ == '__main__':
-    book_url = "https://books.toscrape.com/catalogue/soumission_998/index.html"
-    create_table()
-    price = fetch_price(book_url)
-    if price is not None:
-        save(price)
+    main()
