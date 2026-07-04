@@ -1,8 +1,4 @@
-#ignore venv
 venv/
-
-#cache python
 __pycache__/
-
-#db
 *.db
+config.py

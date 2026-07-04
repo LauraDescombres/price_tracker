@@ -2,6 +2,7 @@ import requests
 from db import connexion
 from bs4 import BeautifulSoup
 from datetime import datetime as dt
+from config import WEBHOOK_URL
 
 #fonction qui recupère les produits actifs
 def get_products():
@@ -52,6 +53,12 @@ def save(price, produit_id):
         print(f"Erreur lors de l'insertion dans la table: {e}")
         return None
     
+def send_notification(message):
+    try:
+        requests.post(WEBHOOK_URL, json={"content": message})
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de l'envoi de la notification : {e}")
+
 def main():
     produits = get_products()
     if produits is None:
@@ -66,7 +73,10 @@ def main():
         if price is not None:
             save(price, produit_id)
             if prix_cible is not None and price <= prix_cible:
-                print(f"ALERTE : {nom} à {price} (cible : {prix_cible})")
+                if prix_cible is not None and price <= prix_cible:
+                    message = f"🔔 ALERTE : {nom} à {price} (cible : {prix_cible})"
+                    print(message)
+                    send_notification(message)
             else:
                 print(f"{nom} : {price}")
         else:
