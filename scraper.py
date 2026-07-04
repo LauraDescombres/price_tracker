@@ -8,7 +8,7 @@ def get_products():
     try: 
         with connexion() as conn:
             cursor = conn.cursor()
-            sql = '''SELECT id, nom, url FROM produits WHERE actif = 1;'''
+            sql = '''SELECT id, nom, url, prix_cible FROM produits WHERE actif = 1;'''
             cursor.execute(sql)
             rows = cursor.fetchall()
             return rows
@@ -61,11 +61,14 @@ def main():
         print("Aucun produit à scraper")
         return
     
-    for produit_id, nom, url in produits:
+    for produit_id, nom, url, prix_cible in produits:
         price = fetch_price(url)
         if price is not None:
             save(price, produit_id)
-            print(f"{nom} : {price}")
+            if prix_cible is not None and price <= prix_cible:
+                print(f"ALERTE : {nom} à {price} (cible : {prix_cible})")
+            else:
+                print(f"{nom} : {price}")
         else:
             print(f"Erreur sur le produit {nom}")
 
