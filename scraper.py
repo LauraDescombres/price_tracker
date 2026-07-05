@@ -1,5 +1,5 @@
 import requests
-from db import connexion
+from app.db import connexion
 from bs4 import BeautifulSoup
 from datetime import datetime as dt
 from config import WEBHOOK_URL

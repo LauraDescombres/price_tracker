@@ -1,5 +1,5 @@
 import argparse
-from db import connexion
+from app.db import connexion
 
 def add_product(nom, url, prix_cible):
     try:

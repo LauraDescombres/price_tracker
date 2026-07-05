@@ -1,4 +1,4 @@
-from db import connexion
+from app.db import connexion
 
 try:
     with connexion() as conn:
