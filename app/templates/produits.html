@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head>
+    <title>Heimdall</title>
+</head>
+<body>
+    <ul>
+    {% if produits %}
+        {% for produit in produits %}
+            <li> Nom : {{ produit.nom }} - Cible : {{ produit.prix_cible | default("Aucune", true) }}</li>
+        {% endfor %}
+    {% else %}
+        <p>Aucun produit</p>
+    {% endif %}
+    </ul>
+</body>
+</html>
