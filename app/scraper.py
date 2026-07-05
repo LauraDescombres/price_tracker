@@ -1,8 +1,8 @@
 import requests
-from app.db import connexion
+from notifications import send_notification
+from db import connexion
 from bs4 import BeautifulSoup
 from datetime import datetime as dt
-from config import WEBHOOK_URL
 
 #fonction qui recupère les produits actifs
 def get_products():
@@ -52,12 +52,6 @@ def save(price, produit_id):
     except Exception as e:
         print(f"Erreur lors de l'insertion dans la table: {e}")
         return None
-    
-def send_notification(message):
-    try:
-        requests.post(WEBHOOK_URL, json={"content": message})
-    except requests.exceptions.RequestException as e:
-        print(f"Erreur lors de l'envoi de la notification : {e}")
 
 def main():
     produits = get_products()
