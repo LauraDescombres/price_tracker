@@ -1,56 +1,5 @@
 import argparse
-from app.db import connexion
-
-def add_product(nom, url, prix_cible):
-    try:
-        with connexion() as conn:
-            cursor = conn.cursor()
-            sql = 'INSERT INTO produits (nom, url, prix_cible) VALUES (?, ?, ?);'
-            cursor.execute(sql, (nom, url, prix_cible))
-            conn.commit()
-            print(f"Produit '{nom}' ajouté.")
-    except Exception as e:
-        print(f"Erreur lors de l'insertion dans la table: {e}")
-        return None
-
-def list_products():
-    try:
-        with connexion() as conn:
-            cursor = conn.cursor()
-            sql = '''SELECT id, nom, actif, prix_cible FROM produits'''
-            cursor.execute(sql)
-            rows = cursor.fetchall()
-            return rows
-    except Exception as e:
-        print(f"Erreur lors du select dans la table: {e}")
-
-def update_target(produit_id, prix_cible):
-    try:
-        with connexion() as conn:
-            cursor = conn.cursor()
-            sql = '''UPDATE produits SET prix_cible = ? WHERE id = ?;'''
-            cursor.execute(sql, (prix_cible, produit_id))
-            conn.commit()
-            if cursor.rowcount > 0:
-                print(f"Prix cible pour le produit {produit_id} mis à jour")
-            else:
-                print(f"Produit {produit_id} non trouvé")
-    except Exception as e:
-        print(f"Erreur lors de l'update {e}")
-
-def remove_product(produit_id):
-    try:
-        with connexion() as conn:
-            cursor = conn.cursor()
-            sql = '''UPDATE produits SET actif = ? WHERE id = ?;'''
-            cursor.execute(sql, (0, produit_id))
-            conn.commit()
-            if cursor.rowcount > 0:
-                print(f"Produit {produit_id} désactivé")
-            else:
-                print(f"Produit {produit_id} non trouvé")
-    except Exception as e:
-        print(f"Erreur lors de la desactivation dans la table: {e}")
+from app.repository import add_product, remove_product, update_target, get_all_products
 
 def main():
     parser = argparse.ArgumentParser(description="Gestion des produits suivis")
@@ -79,7 +28,7 @@ def main():
     if args.commande == "add":
         add_product(args.nom, args.url, args.target)
     elif args.commande == "list":
-        produits = list_products()
+        produits = get_all_products()
         
         if produits is None:
             return
@@ -88,18 +37,18 @@ def main():
             print("Aucun produit à lister")
             return
         
-        for produit_id, nom, actif, prix_cible in produits:
-            if actif == 1:
+        for produit in produits:
+            if produit.actif == 1:
                 statut = 'actif'
             else:
                 statut = 'inactif'
 
-            if prix_cible is None:
+            if produit.prix_cible is None:
                 cible = "Aucune"
             else:
-                cible = prix_cible   
+                cible = produit.prix_cible   
                 
-            print(f"{produit_id} | {nom} | {cible} | {statut}")         
+            print(f"{produit.id} | {produit.nom} | {cible} | {statut}")         
     elif args.commande == "remove":
         remove_product(args.produit_id)
     elif args.commande == "set-target":
