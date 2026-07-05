@@ -14,7 +14,7 @@ Utilisation du site https://books.toscrape.com/index.html
 ## Installation
 
 ```powershell
-git clone https://github.com/ton-user/price_tracker.git
+git clone https://github.com/LauraDescombres/price_tracker.git
 cd price_tracker
 python -m venv venv
 .\venv\Scripts\Activate.ps1
