@@ -1,18 +1,19 @@
-import requests
-from notifications import send_notification
-from db import connexion
-from bs4 import BeautifulSoup
 from datetime import datetime as dt
+import requests
+from bs4 import BeautifulSoup
+from app.notifications import send_notification
+from app.db import connexion
+from app.models import Produit
 
 #fonction qui recupère les produits actifs
 def get_products():
     try: 
         with connexion() as conn:
             cursor = conn.cursor()
-            sql = '''SELECT id, nom, url, prix_cible FROM produits WHERE actif = 1;'''
+            sql = '''SELECT id, nom, url, actif, prix_cible FROM produits WHERE actif = 1;'''
             cursor.execute(sql)
             rows = cursor.fetchall()
-            return rows
+            return [Produit(*row) for row in rows]
     except Exception as e:
         print(f"Erreur lors de la récupération des produits : {e}")
         return None
@@ -62,19 +63,18 @@ def main():
         print("Aucun produit à scraper")
         return
     
-    for produit_id, nom, url, prix_cible in produits:
-        price = fetch_price(url)
+    for produit in produits:
+        price = fetch_price(produit.url)
         if price is not None:
-            save(price, produit_id)
-            if prix_cible is not None and price <= prix_cible:
-                if prix_cible is not None and price <= prix_cible:
-                    message = f"🔔 ALERTE : {nom} à {price} (cible : {prix_cible})"
-                    print(message)
-                    send_notification(message)
+            save(price, produit.id)
+            if produit.prix_cible is not None and price <= produit.prix_cible:
+                message = f"🔔 ALERTE : {produit.nom} à {price} (cible : {produit.prix_cible})"
+                print(message)
+                send_notification(message)
             else:
-                print(f"{nom} : {price}")
+                print(f"{produit.nom} : {price}")
         else:
-            print(f"Erreur sur le produit {nom}")
+            print(f"Erreur sur le produit {produit.nom}")
 
 if __name__ == '__main__':
     main()
