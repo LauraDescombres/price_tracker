@@ -2,13 +2,26 @@
 
 {% block content %}
     <h1>Produits suivis</h1>
-    <ul>
     {% if produits %}
-        {% for produit in produits %}
-            <li> Nom : {{ produit.nom }} - Cible : {{ produit.prix_cible | default("Aucune", true) }}</li>
-        {% endfor %}
+    <table>
+       <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Cible</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for produit in produits %}
+                <tr>
+                    <td>{{ produit.nom }}</td>
+                    <td>{{ produit.prix_cible | default("Aucune", true) }}</td>
+                    <td>{% if produit.actif == 1 %} <span class="badge badge-actif">actif</span> {% else %} <span class="badge badge-inactif">inactif</span> {% endif %}</td>
+                </tr>
+            {% endfor %}
+        </tbody> 
+    </table>
     {% else %}
         <p>Aucun produit</p>
     {% endif %}
-    </ul>
 {% endblock %}
