@@ -17,8 +17,18 @@
                 <tr>
                     <td>{{ item.produit.nom }}</td>
                     <td>{{ item.produit.prix_cible | default("Aucune", true) }}</td>
-                    <td>{{ item.dernier_prix | default("-", true) }}</td>
-                    <td>{% if item.produit.actif == 1 %} <span class="badge badge-actif">actif</span> {% else %} <span class="badge badge-inactif">inactif</span> {% endif %}</td>
+                    <td>{% if item.sous_cible %}
+                            <span class="prix-alerte"> {{item.dernier_prix}} </span>
+                        {% else %}
+                            {{item.dernier_prix | default("-", true)}}
+                        {% endif %}
+                    </td>
+                    <td>{% if item.produit.actif == 1 %}
+                            <span class="badge badge-actif">actif</span>
+                        {% else %}
+                            <span class="badge badge-inactif">inactif</span>
+                        {% endif %}
+                    </td>
                 </tr>
             {% endfor %}
         </tbody> 

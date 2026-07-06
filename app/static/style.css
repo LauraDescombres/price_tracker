@@ -32,3 +32,8 @@ table {
     background: #f8d7da;
     color: #842029;
 }
+
+.prix-alerte {
+    color: #0f5132;
+    font-weight: 700;
+}

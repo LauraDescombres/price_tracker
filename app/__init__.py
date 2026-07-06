@@ -12,10 +12,19 @@ def create_app():
         if produits is None:
             return render_template("produits.html", produits=[])
 
-        produits_enrichis = [
-            {"produit": p, "dernier_prix": get_last_price(p.id)}
-            for p in produits
-        ]
+        produits_enrichis = []
+        for p in produits:
+            dernier_prix = get_last_price(p.id)
+            sous_cible = (
+                p.prix_cible is not None
+                and dernier_prix is not None
+                and dernier_prix <= p.prix_cible
+            )
+            produits_enrichis.append({
+                "produit": p,
+                "dernier_prix": dernier_prix,
+                "sous_cible": sous_cible,
+            })
         
         return render_template("produits.html", produits=produits_enrichis)
 
