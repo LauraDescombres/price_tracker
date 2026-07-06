@@ -8,15 +8,17 @@
             <tr>
                 <th>Nom</th>
                 <th>Cible</th>
+                <th>Dernier prix</th>
                 <th>Statut</th>
             </tr>
         </thead>
         <tbody>
-            {% for produit in produits %}
+            {% for item in produits %}
                 <tr>
-                    <td>{{ produit.nom }}</td>
-                    <td>{{ produit.prix_cible | default("Aucune", true) }}</td>
-                    <td>{% if produit.actif == 1 %} <span class="badge badge-actif">actif</span> {% else %} <span class="badge badge-inactif">inactif</span> {% endif %}</td>
+                    <td>{{ item.produit.nom }}</td>
+                    <td>{{ item.produit.prix_cible | default("Aucune", true) }}</td>
+                    <td>{{ item.dernier_prix | default("-", true) }}</td>
+                    <td>{% if item.produit.actif == 1 %} <span class="badge badge-actif">actif</span> {% else %} <span class="badge badge-inactif">inactif</span> {% endif %}</td>
                 </tr>
             {% endfor %}
         </tbody> 
