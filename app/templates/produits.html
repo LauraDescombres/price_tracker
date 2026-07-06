@@ -1,9 +1,7 @@
-<!doctype html>
-<html>
-<head>
-    <title>Heimdall</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Produits suivis</h1>
     <ul>
     {% if produits %}
         {% for produit in produits %}
@@ -13,5 +11,4 @@
         <p>Aucun produit</p>
     {% endif %}
     </ul>
-</body>
-</html>
+{% endblock %}
