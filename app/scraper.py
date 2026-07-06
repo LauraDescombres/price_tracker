@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 from app.notifications import send_notification
 from app.db import connexion
-from app.repository import get_active_products
+from app.produit_repository import get_active_products
 
 #scrape + retourne prix
 def fetch_price(url):

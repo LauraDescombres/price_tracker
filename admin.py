@@ -1,5 +1,5 @@
 import argparse
-from app.repository import add_product, remove_product, update_target, get_all_products
+from app.produit_repository import add_product, remove_product, update_target, get_all_products
 
 def main():
     parser = argparse.ArgumentParser(description="Gestion des produits suivis")

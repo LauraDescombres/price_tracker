@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from app.repository import get_all_products
+from app.produit_repository import get_all_products
 
 def create_app():
     app = Flask(__name__)
