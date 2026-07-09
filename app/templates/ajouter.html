@@ -1,16 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="{{ url_for('ajouter') }}" method="post">
-    <label for="nom">Nom du produit
-        <input type="text" name="nom" id="nom" />
-    </label>
-    <label for="url">URL du produit
-        <input type="url" name="url" id="url" />
-    </label>
-    <label for="cible">Prix cible du produit
-        <input type="number" name="cible" id="cible" step="any" />
-    </label>
-    <button type="submit">Sauvegarder</button>
-</form>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <a href="{{ url_for('index') }}" role="button">Retour</a>
+    <form action="{{ url_for('ajouter') }}" method="post">
+        <label for="nom">Nom du produit
+            <input type="text" name="nom" id="nom" required />
+        </label>
+        <label for="url">URL du produit
+            <input type="url" name="url" id="url" required />
+        </label>
+        <label for="cible">Prix cible du produit
+            <input type="number" name="cible" id="cible" step="any" />
+        </label>
+        <button type="submit">Sauvegarder</button>
+    </form>
 {% endblock %}
