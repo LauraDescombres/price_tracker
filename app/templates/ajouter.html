@@ -10,8 +10,8 @@
         </ul>
       {% endif %}
     {% endwith %}
-    <a href="{{ url_for('index') }}" role="button">Retour</a>
-    <form action="{{ url_for('ajouter') }}" method="post">
+    <a href="{{ url_for('main.index') }}" role="button">Retour</a>
+    <form action="{{ url_for('main.ajouter') }}" method="post">
         <label for="nom">Nom du produit
             <input type="text" name="nom" id="nom" required />
         </label>

@@ -2,7 +2,7 @@
 
 {% block content %}
     <h1>Produits suivis</h1>
-    <a href="{{ url_for('ajouter') }}" role="button">Ajouter un produit</a>
+    <a href="{{ url_for('main.ajouter') }}" role="button">Ajouter un produit</a>
     {% if produits %}
     <table>
        <thead>
@@ -17,7 +17,7 @@
         <tbody>
             {% for item in produits %}
                 <tr>
-                    <td><form method="post" action="{{ url_for('supprimer', id=item.produit.id) }}" onsubmit="return confirm('Supprimer ce produit ?')"><button type="submit">Supprimer</button></form></td>
+                    <td><form method="post" action="{{ url_for('main.supprimer', id=item.produit.id) }}" onsubmit="return confirm('Supprimer ce produit ?')"><button type="submit">Supprimer</button></form></td>
                     <td>{{ item.produit.nom }}</td>
                     <td>{{ item.produit.prix_cible | default("Aucune", true) }}</td>
                     <td>{% if item.sous_cible %}
