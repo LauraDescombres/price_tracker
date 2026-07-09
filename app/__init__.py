@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
-from app.produit_repository import get_all_products, add_product
+from app.produit_repository import get_all_products, add_product, delete_product
 from app.releve_repository import get_last_price
 from app.config import secret_key
 
@@ -60,5 +60,18 @@ def create_app():
             return redirect(url_for('index'))
 
         return render_template("ajouter.html")
+
+    @app.route("/supprimer/<int:id>", methods=['POST'])
+    def supprimer(id):
+        delete = delete_product(id)
+
+        if delete is None:
+            flash('Erreur SQL', 'error')
+        elif delete:
+            flash('Suppression OK', 'success')
+        else:
+            flash('Produit introuvable', 'error')
+
+        return redirect(url_for('index'))
 
     return app
