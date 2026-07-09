@@ -50,7 +50,7 @@ def update_target(produit_id, prix_cible):
     except Exception as e:
         print(f"Erreur lors de l'update {e}")
 
-def remove_product(produit_id):
+def desactivate_product(produit_id):
     try:
         with connexion() as conn:
             cursor = conn.cursor()
@@ -63,3 +63,20 @@ def remove_product(produit_id):
                 print(f"Produit {produit_id} non trouvé")
     except Exception as e:
         print(f"Erreur lors de la desactivation dans la table: {e}")
+
+def delete_product(produit_id):
+    try:
+        with connexion() as conn:
+            cursor = conn.cursor()
+            sql1 = '''DELETE FROM releves WHERE produit_id = ?;'''
+            sql2 = '''DELETE FROM produits WHERE id = ?;'''
+            cursor.execute(sql1, (produit_id,))
+            cursor.execute(sql2, (produit_id,))
+            conn.commit()
+            if cursor.rowcount > 0:
+                return True
+            else:
+                return None
+    except Exception as e:
+        print(f"Erreur lors de la suppression d'un produit {e}")
+        return None

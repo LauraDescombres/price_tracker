@@ -1,7 +1,9 @@
 import sqlite3
 
 def connexion():
-    return sqlite3.connect('BDD.db')
+    conn = sqlite3.connect('BDD.db')
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
 
 def create_tables():
     sql = """
